@@ -1,25 +1,42 @@
 
 // WantedProcentage is number ex. "60" wihtout percentage markings
-function countRealWorkingTime(wantedProcentage){
-    let wantedProcentageInDouble = wantedProcentage/100
-    console.log("wantedPercentageInDouble is: " +wantedProcentageInDouble)
+function countRealWorkingTime(){
+    let hah = []
+    let newA = []
+    //let wantedProcentageInDouble = wantedProcentage/100
+    //console.log("wantedPercentageInDouble is: " +wantedProcentageInDouble)
     
     let allValues = document.querySelectorAll(".header-balance-part")
     //Counts total of days showing currently on kellokortti by counting the plus icons on right side of each day working time marking
     let howManyDaysIsShowing = document.querySelectorAll(".float-right.glyphicon.glyphicon-plus-sign").length
     let workingDaysCount = howManyDaysIsShowing-countShowingfreeDays()
     console.log("workingDayscount" + workingDaysCount)
-    let fullWorkDayInMinutes = 7*60 + 25
-    let realWorkDayInMinutes = Math.trunc(fullWorkDayInMinutes*wantedProcentageInDouble)
-    let realMaxTime = workingDaysCount*(realWorkDayInMinutes)
-    allMinutes = countAllMinutes(allValues, fullWorkDayInMinutes, realWorkDayInMinutes) 
-    console.log(allMinutes)
-    console.log("real max time is: " + realMaxTime)
-    let realTime = allMinutes - realMaxTime
-    console.log("Your real saldo is: " + realTime)
+    hah = countAllMinutes(allValues, hah) 
+    console.log(hah)
+    for(let i = 0; i < hah.length; i++){
+            if(i <= hah.length-2){
+                let num2 = i+1
+                if(hah[i].includes("h")){
+                    let combined = hah[i] + hah[i+1]
+                    newA.push(combined)
+                }else{
+                    if(i!= 0){
+                        if(!hah[i-1].includes("h")){
+                            newA.push(hah[i])
+                        }
+                    }
+                    if(i === 0 && !hah[i].includes("h")){
+                        newA.push(hah[i])
+                    }
+                } 
+            }
+                
+    }
+    console.log(newA)
+    console.log(hah)
 }
 
-function countAllMinutes(allValues, fullWorkDayInMinutes, realWorkDayInMinutes){
+function countAllMinutes(allValues, hah){
     let allMinutes = 0
     let previousHourWasMinus = false
     for(let  val of allValues.values()){
@@ -38,10 +55,11 @@ function countAllMinutes(allValues, fullWorkDayInMinutes, realWorkDayInMinutes){
         if(result.includes("min" && previousHourWasMinus)){
             previousHourWasMinus = false
         }
+        hah.push(result = individualTime.match(patt).join(''))
         console.log("allMinutes is: " + allMinutes)
             //console.log(individualTime)
         }
-    return allMinutes
+    return hah
 }
 
 //add minutes, if is hour, changes it to minutes automatically before add
