@@ -1,4 +1,4 @@
-const fullWorkDayMinutes = 7*60+25
+let fullWorkDayMinutes = 7*60+25
 // WantedProcentage is number ex. "60" wihtout percentage markings
 function countRealWorkingTime(wantedProcentage){
     let originalArray = []
