@@ -1,8 +1,8 @@
 
 // WantedProcentage is number ex. "60" wihtout percentage markings
 function countRealWorkingTime(){
-    let hah = []
-    let newA = []
+    let originalArray = []
+   
     //let wantedProcentageInDouble = wantedProcentage/100
     //console.log("wantedPercentageInDouble is: " +wantedProcentageInDouble)
     
@@ -11,29 +11,46 @@ function countRealWorkingTime(){
     let howManyDaysIsShowing = document.querySelectorAll(".float-right.glyphicon.glyphicon-plus-sign").length
     let workingDaysCount = howManyDaysIsShowing-countShowingfreeDays()
     console.log("workingDayscount" + workingDaysCount)
-    hah = countAllMinutes(allValues, hah) 
-    console.log(hah)
-    for(let i = 0; i < hah.length; i++){
-            if(i <= hah.length-2){
-                let num2 = i+1
-                if(hah[i].includes("h")){
-                    let combined = hah[i] + hah[i+1]
-                    newA.push(combined)
-                }else{
-                    if(i!= 0){
-                        if(!hah[i-1].includes("h")){
-                            newA.push(hah[i])
-                        }
-                    }
-                    if(i === 0 && !hah[i].includes("h")){
-                        newA.push(hah[i])
-                    }
-                } 
-            }
-                
-    }
+    originalArray = countAllMinutes(allValues, originalArray) 
+    let combinedArray = createCombinedArray(originalArray)
+    let newA = transferArrayToMinutes(combinedArray)
     console.log(newA)
-    console.log(hah)
+    console.log(originalArray)
+    console.log(combinedArray)
+}
+
+function transferArrayToMinutes(combinedArray){
+    let arr = []
+    for(let i = 0; i < combinedArray.length; i++){
+        let element = combinedArray[i]
+        element = element.replace("min", "")
+        arr.push(element)
+    }
+    return arr
+}
+
+function createCombinedArray(originalArray){
+    let hoursAndMinsCombined = []
+    for(let i = 0; i < originalArray.length; i++){
+        if(i <= originalArray.length-2){
+            let num2 = i+1
+            if(originalArray[i].includes("h")){
+                let combined = originalArray[i] + originalArray[i+1]
+                hoursAndMinsCombined.push(combined)
+            }else{
+                if(i!= 0){
+                    if(!originalArray[i-1].includes("h")){
+                        hoursAndMinsCombined.push(originalArray[i])
+                    }
+                }
+                if(i === 0 && !originalArray[i].includes("h")){
+                    hoursAndMinsCombined.push(originalArray[i])
+                }
+            } 
+        }
+            
+}
+return hoursAndMinsCombined
 }
 
 function countAllMinutes(allValues, hah){
