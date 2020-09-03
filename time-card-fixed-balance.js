@@ -1,9 +1,9 @@
 let fullWorkDayMinutes = 7*60+25
 // WantedProcentage is number ex. "60" without percentage markings, fullWorkDayNumber is number of full workDays currently showing at kellokortti.utu.fi. It will be counted from bottom to up, so if fullWorkDayNumber = 1, the oldest marking in kellokortti is full work day.
-function countRealWorkingTime(wantedProcentage, fullWorkDayNumber){
+function countRealWorkingTime(wantedProcentageAsInt, fullWorkDayNumber){
     let originalArray = []
    
-    let wantedProcentageInDouble = wantedProcentage/100
+    let wantedProcentageInDouble = wantedProcentageAsInt/100
     let currentWorkDayLength = Math.trunc(fullWorkDayMinutes*wantedProcentageInDouble)
     //console.log("wantedPercentageInDouble is: " +wantedProcentageInDouble)
     
