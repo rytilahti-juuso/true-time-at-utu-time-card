@@ -26,11 +26,20 @@ function transferArrayToMinutes(combinedArray){
         element = element.replace("min", "")
         element = processHourToMinutes(element)
         //Process hours to minutes
-        element = addMinutesToHour(element)
+        element = convertHoursToMinutesAndAddMinutesAndHoursTogether(element)
+        element = convertRelationalMinutesToActualMinutes(element)
         arr.push(element)
     }
     return arr
 }
+
+//returns actual working minutes, element is the relational minutes (+/- minus minutes as int relational to full working hours)
+function convertRelationalMinutesToActualMinutes(element) {
+    let fullWorkDayMinutes = 7*60+25
+        element = fullWorkDayMinutes + element
+    return element
+}
+
 
 //Process hour to minutes from array's element, return minus ex. 120-h39
 function processHourToMinutes(element){
@@ -54,7 +63,8 @@ function processHourToMinutes(element){
     return element
 }
 
-function addMinutesToHour(element){
+//returns allMinutes as Int!
+function convertHoursToMinutesAndAddMinutesAndHoursTogether(element){
     // all minutes combined
     let allMinutes = 0
     //minutes converted from hour
