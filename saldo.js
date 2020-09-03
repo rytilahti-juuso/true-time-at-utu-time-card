@@ -13,14 +13,14 @@ function countRealWorkingTime(){
     console.log("workingDayscount" + workingDaysCount)
     originalArray = countAllMinutes(allValues, originalArray) 
     let combinedArray = createCombinedArray(originalArray)
-    let newA = transferArrayToMinutes(combinedArray)
-    console.log(newA)
+    let minutesArray = transformArrayToMinutes(combinedArray)
+    console.log(minutesArray)
     console.log(originalArray)
     console.log(combinedArray)
 }
 
 //returns array that has hours and mins converted to minutes. All array elements are now int
-function transferArrayToMinutes(combinedArray){
+function transformArrayToMinutes(combinedArray){
     let arr = []
     for(let i = 0; i < combinedArray.length; i++){
         let element = combinedArray[i]
