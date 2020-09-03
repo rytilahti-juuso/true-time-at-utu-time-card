@@ -19,6 +19,7 @@ function countRealWorkingTime(){
     console.log(combinedArray)
 }
 
+//returns array that has hours and mins converted to minutes. All array elements are now int
 function transferArrayToMinutes(combinedArray){
     let arr = []
     for(let i = 0; i < combinedArray.length; i++){
