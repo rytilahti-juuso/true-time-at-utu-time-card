@@ -10,14 +10,22 @@ function countRealWorkingTime(wantedProcentage){
     let allValues = document.querySelectorAll(".header-balance-part")
     //Counts total of days showing currently on kellokortti by counting the plus icons on right side of each day working time marking
     let howManyDaysIsShowing = document.querySelectorAll(".float-right.glyphicon.glyphicon-plus-sign").length
+    //TODO make work with some days being 60% only
     let workingDaysCount = howManyDaysIsShowing-countShowingfreeDays()
-    console.log("workingDayscount" + workingDaysCount)
     originalArray = preProcessOriginalArray(allValues, originalArray) 
     let combinedArray = createCombinedArray(originalArray)
     let minutesArray = transformArrayToMinutes(combinedArray, currentWorkDayLength)
-    console.log(minutesArray)
-    console.log(originalArray)
-    console.log(combinedArray)
+    console.log(`"Total balance is: ${gainTotalBalance(minutesArray)} minutes`)
+}
+
+//Counts total balance, takes arg fully processed array which elements are all ints, return total balance as int
+function gainTotalBalance(arr){
+    let total = 0
+    for(let i = 0; i < arr.length; i++){
+        let element = arr[i]
+        total =  total + element
+    }
+    return total
 }
 
 //returns array that has hours and mins converted to minutes. All array elements are now int
