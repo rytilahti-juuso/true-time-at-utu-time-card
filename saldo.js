@@ -36,7 +36,7 @@ function transformArrayToMinutes(combinedArray, currentWorkDayLength){
     return arr
 }
 
-function countActionalRelationalMinutes(element, currentWorkDayLength,){
+function countActionalRelationalMinutes(element, currentWorkDayLength){
     element = element -currentWorkDayLength
     return element
 }
@@ -120,17 +120,13 @@ function createCombinedArray(originalArray){
 return hoursAndMinsCombined
 }
 
-function countAllMinutes(allValues, hah){
-    let allMinutes = 0
+function countAllMinutes(allValues, arr){
     let previousHourWasMinus = false
     for(let  val of allValues.values()){
-        console.log(allValues.values()[0])
         let individualTime = val.innerHTML.toString()      
         let patt = /\S/g;
         
         let result = individualTime.match(patt).join('')
-        allMinutes = addMinutes(result, allMinutes, previousHourWasMinus)
-        allMinutes = subtractMinutes(result, allMinutes, previousHourWasMinus)
         // next round of minutes is minus      
         if(result.includes("-") && result.includes("h")){
             previousHourWasMinus = true
@@ -139,45 +135,11 @@ function countAllMinutes(allValues, hah){
         if(result.includes("min" && previousHourWasMinus)){
             previousHourWasMinus = false
         }
-        hah.push(result = individualTime.match(patt).join(''))
-        console.log("allMinutes is: " + allMinutes)
+        arr.push(result = individualTime.match(patt).join(''))
             //console.log(individualTime)
         }
-    return hah
+    return arr
 }
-
-//add minutes, if is hour, changes it to minutes automatically before add
-function addMinutes(result, allMinutes, previousHourWasMinus){
-    let pattN = /[0-9]/g
-    let isHour = result.includes("h")
-    if(!result.includes("-")){
-
-        if(isHour ){
-            allMinutes = allMinutes + hoursToMin(result)
-        }else{
-            if(!previousHourWasMinus){
-                allMinutes = allMinutes + parseInt(result.match(pattN).join(''))
-            }
-        }
-    }
-    return allMinutes
-}
-
-//Subtract minutes, if is hour, changes it to minutes automatically before subtracting
-function subtractMinutes(result, allMinutes, previousHourWasMinus){
-    let pattN = /[0-9]/g
-    let isHour = result.includes("h")
-    if(result.includes("-")){
-        if(isHour){
-        allMinutes = allMinutes - (hoursToMin(result))
-    }else{
-        if(result.includes("-") || previousHourWasMinus)
-        allMinutes = allMinutes - parseInt(result.match(pattN).join(''))
-        }
-    }
-    return allMinutes
-}
-
 //h is string still containing letter 'h'
 function hoursToMin(result){
     let pattN = /[0-9]/g
