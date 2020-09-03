@@ -1,6 +1,6 @@
 let fullWorkDayMinutes = 7*60+25
-// WantedProcentage is number ex. "60" wihtout percentage markings
-function countRealWorkingTime(wantedProcentage){
+// WantedProcentage is number ex. "60" without percentage markings, fullWorkDayNumber is number of full workDays currently showing at kellokortti.utu.fi. It will be counted from bottom to up, so if fullWorkDayNumber = 1, the oldest marking in kellokortti is full work day.
+function countRealWorkingTime(wantedProcentage, fullWorkDayNumber){
     let originalArray = []
    
     let wantedProcentageInDouble = wantedProcentage/100
@@ -10,13 +10,13 @@ function countRealWorkingTime(wantedProcentage){
     let allValues = document.querySelectorAll(".header-balance-part")
     //Counts total of days showing currently on kellokortti by counting the plus icons on right side of each day working time marking
     let howManyDaysIsShowing = document.querySelectorAll(".float-right.glyphicon.glyphicon-plus-sign").length
-    //TODO make work with some days being 60% only
-    let workingDaysCount = howManyDaysIsShowing-countShowingfreeDays()
+    //let workingDaysCount = howManyDaysIsShowing-countShowingfreeDays()
     originalArray = preProcessOriginalArray(allValues, originalArray) 
     let combinedArray = createCombinedArray(originalArray)
-    let minutesArray = transformArrayToMinutes(combinedArray, currentWorkDayLength)
+    let minutesArray = transformArrayToMinutes(combinedArray, currentWorkDayLength, fullWorkDayNumber)
     console.log(`"Total balance is: ${gainTotalBalance(minutesArray)} minutes`)
 }
+
 
 //Counts total balance, takes arg fully processed array which elements are all ints, return total balance as int
 function gainTotalBalance(arr){
@@ -29,7 +29,7 @@ function gainTotalBalance(arr){
 }
 
 //returns array that has hours and mins converted to minutes. All array elements are now int
-function transformArrayToMinutes(combinedArray, currentWorkDayLength){
+function transformArrayToMinutes(combinedArray, currentWorkDayLength, fullWorkDayNumber){
     let arr = []
     for(let i = 0; i < combinedArray.length; i++){
         let element = combinedArray[i]
@@ -38,7 +38,12 @@ function transformArrayToMinutes(combinedArray, currentWorkDayLength){
         //Process hours to minutes
         element = convertHoursToMinutesAndAddMinutesAndHoursTogether(element)
         element = convertRelationalMinutesToActualMinutes(element)
-        element = countActionalRelationalMinutes(element, currentWorkDayLength)
+        if(i >= combinedArray.length-fullWorkDayNumber){
+            //Do nothing, full workDays are handled in convertRelationalMinutesToActualMinutes()
+        }else{
+            //process the shorten days to correct values
+            element = countActionalRelationalMinutes(element, currentWorkDayLength)
+        }
         arr.push(element)
     }
     return arr
