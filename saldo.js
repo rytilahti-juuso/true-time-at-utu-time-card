@@ -24,9 +24,33 @@ function transferArrayToMinutes(combinedArray){
     for(let i = 0; i < combinedArray.length; i++){
         let element = combinedArray[i]
         element = element.replace("min", "")
+        element = processHourToMinutes(element)
+        //Process hours to minutes
+        
         arr.push(element)
     }
     return arr
+}
+
+function processHourToMinutes(element){
+    if(element.includes("h")){
+        let hour = 0
+        //take the int of hour
+        if(element.includes("-")){
+            hour = element.substring(1, element.indexOf("h"))
+        }else{
+            hour= element.substring(0, element.indexOf("h"))
+        }
+        hour = parseInt(hour)*60
+        //replace the hour amount with hour's amount of minutes
+        if(element.includes("-")){
+            element = element.replace(element.substring(1, element.indexOf("h")), "")
+        }else{
+            element = element.replace(element.substring(0, element.indexOf("h")), "")
+        }
+        element = hour.toString() + element
+    }
+    return element
 }
 
 function createCombinedArray(originalArray){
