@@ -12,7 +12,7 @@ function countRealWorkingTime(wantedProcentage){
     let howManyDaysIsShowing = document.querySelectorAll(".float-right.glyphicon.glyphicon-plus-sign").length
     let workingDaysCount = howManyDaysIsShowing-countShowingfreeDays()
     console.log("workingDayscount" + workingDaysCount)
-    originalArray = countAllMinutes(allValues, originalArray) 
+    originalArray = preProcessOriginalArray(allValues, originalArray) 
     let combinedArray = createCombinedArray(originalArray)
     let minutesArray = transformArrayToMinutes(combinedArray, currentWorkDayLength)
     console.log(minutesArray)
@@ -120,32 +120,17 @@ function createCombinedArray(originalArray){
 return hoursAndMinsCombined
 }
 
-function countAllMinutes(allValues, arr){
+//Cleans Original array of extra spaces etc.
+function preProcessOriginalArray(allValues, arr){
     let previousHourWasMinus = false
     for(let  val of allValues.values()){
         let individualTime = val.innerHTML.toString()      
-        let patt = /\S/g;
-        
+        let patt = /\S/g;   
         let result = individualTime.match(patt).join('')
-        // next round of minutes is minus      
-        if(result.includes("-") && result.includes("h")){
-            previousHourWasMinus = true
-        }
-        // Has gone through the minus minutes 
-        if(result.includes("min" && previousHourWasMinus)){
-            previousHourWasMinus = false
-        }
         arr.push(result = individualTime.match(patt).join(''))
             //console.log(individualTime)
         }
     return arr
-}
-//h is string still containing letter 'h'
-function hoursToMin(result){
-    let pattN = /[0-9]/g
-    let min = parseInt(result.match(pattN).join('')) * 60
-    console.log(min)
-    return min
 }
 
 //returns number of free days from work
