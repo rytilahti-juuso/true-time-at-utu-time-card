@@ -26,12 +26,13 @@ function transferArrayToMinutes(combinedArray){
         element = element.replace("min", "")
         element = processHourToMinutes(element)
         //Process hours to minutes
-        
+        element = addMinutesToHour(element)
         arr.push(element)
     }
     return arr
 }
 
+//Process hour to minutes from array's element, return minus ex. 120-h39
 function processHourToMinutes(element){
     if(element.includes("h")){
         let hour = 0
@@ -51,6 +52,31 @@ function processHourToMinutes(element){
         element = hour.toString() + element
     }
     return element
+}
+
+function addMinutesToHour(element){
+    // all minutes combined
+    let allMinutes = 0
+    //minutes converted from hour
+    let hMin = 0
+    //"normal" minutes
+    let min = 0
+    let isMinus = element.includes("-")
+    //removing "-"-sign for easier preprocessing
+    element = element.replace("-", "")
+    if(element.includes("h")){
+        hMin = parseInt(element.substring(0, element.indexOf("h")))
+        min = parseInt(element.indexOf("h")+1, element.length)
+        allMinutes = hMin +min
+    }else{
+        min= parseInt(element)
+        allMinutes = min
+    }
+    //If is minus multiply with -1
+    if(isMinus){
+        allMinutes = allMinutes * (-1)
+    }
+    return allMinutes
 }
 
 function createCombinedArray(originalArray){
