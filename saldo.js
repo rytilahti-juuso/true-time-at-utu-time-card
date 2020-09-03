@@ -1,9 +1,10 @@
-
+const fullWorkDayMinutes = 7*60+25
 // WantedProcentage is number ex. "60" wihtout percentage markings
-function countRealWorkingTime(){
+function countRealWorkingTime(wantedProcentage){
     let originalArray = []
    
-    //let wantedProcentageInDouble = wantedProcentage/100
+    let wantedProcentageInDouble = wantedProcentage/100
+    let currentWorkDayLength = Math.trunc(fullWorkDayMinutes*wantedProcentageInDouble)
     //console.log("wantedPercentageInDouble is: " +wantedProcentageInDouble)
     
     let allValues = document.querySelectorAll(".header-balance-part")
@@ -13,14 +14,14 @@ function countRealWorkingTime(){
     console.log("workingDayscount" + workingDaysCount)
     originalArray = countAllMinutes(allValues, originalArray) 
     let combinedArray = createCombinedArray(originalArray)
-    let minutesArray = transformArrayToMinutes(combinedArray)
+    let minutesArray = transformArrayToMinutes(combinedArray, currentWorkDayLength)
     console.log(minutesArray)
     console.log(originalArray)
     console.log(combinedArray)
 }
 
 //returns array that has hours and mins converted to minutes. All array elements are now int
-function transformArrayToMinutes(combinedArray){
+function transformArrayToMinutes(combinedArray, currentWorkDayLength){
     let arr = []
     for(let i = 0; i < combinedArray.length; i++){
         let element = combinedArray[i]
@@ -29,14 +30,19 @@ function transformArrayToMinutes(combinedArray){
         //Process hours to minutes
         element = convertHoursToMinutesAndAddMinutesAndHoursTogether(element)
         element = convertRelationalMinutesToActualMinutes(element)
+        element = countActionalRelationalMinutes(element, currentWorkDayLength)
         arr.push(element)
     }
     return arr
 }
 
+function countActionalRelationalMinutes(element, currentWorkDayLength,){
+    element = element -currentWorkDayLength
+    return element
+}
+
 //returns actual working minutes, element is the relational minutes (+/- minus minutes as int relational to full working hours)
 function convertRelationalMinutesToActualMinutes(element) {
-    let fullWorkDayMinutes = 7*60+25
         element = fullWorkDayMinutes + element
     return element
 }
