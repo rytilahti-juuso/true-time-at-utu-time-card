@@ -182,14 +182,20 @@ return hoursAndMinsCombined
 //Cleans Original array of extra spaces etc.
 function preProcessOriginalArray(allValues, arr){
     let previousHourWasMinus = false
-    for(let  val of allValues.values()){
-        let individualTime = val.innerHTML.toString()      
-        let patt = /\S/g;   
-        let result = individualTime.match(patt).join('')
-        arr.push(result = individualTime.match(patt).join(''))
+    for(let  element of allValues.values()){
+        element = removeSpacesAndPutMinutesAndHoursInToOneString(element)   
+        arr.push(element)
             //console.log(individualTime)
         }
     return arr
+}
+
+function removeSpacesAndPutMinutesAndHoursInToOneString(element){
+    let individualTime = element.innerHTML.toString()      
+        let patt = /\S/g;   
+        element = individualTime.match(patt).join('')
+        element = individualTime.match(patt).join('')
+    return element
 }
 
 //returns number of free days from work
