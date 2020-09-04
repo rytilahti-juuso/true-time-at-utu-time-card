@@ -6,16 +6,12 @@ function countRealWorkingTime(wantedProcentageAsInt, fullWorkDayNumber){
    
     let wantedProcentageInDouble = wantedProcentageAsInt/100
     let currentWorkDayLength = Math.trunc(fullWorkDayMinutes*wantedProcentageInDouble)
-    //console.log("wantedPercentageInDouble is: " +wantedProcentageInDouble)
-    
     let allValues = document.querySelectorAll(".header-balance-part")
     //Counts total of days showing currently on kellokortti by counting the plus icons on right side of each day working time marking
     let howManyDaysIsShowing = document.querySelectorAll(".float-right.glyphicon.glyphicon-plus-sign").length
     //let workingDaysCount = howManyDaysIsShowing-countShowingfreeDays()
     originalArray = preProcessOriginalArray(allValues, originalArray) 
     let combinedArray = createCombinedArray(originalArray)
-    console.log(originalArray)
-    console.log(combinedArray)
     let minutesArray = transformArrayToMinutes(combinedArray, currentWorkDayLength, fullWorkDayNumber)
     let total = gainTotalBalance(minutesArray)
     return returnTotalHoursAndMinutesAsString(total)
@@ -172,7 +168,6 @@ function createCombinedArray(originalArray){
         }
             
 }
-console.log("HOursAndMInsCombined length is: " + hoursAndMinsCombined.length)
 return hoursAndMinsCombined
 }
 
@@ -208,7 +203,6 @@ function preProcessOriginalArray(allValues, arr){
     for(let  element of allValues.values()){
         element = removeSpacesAndPutMinutesAndHoursInToOneString(element)   
         arr.push(element)
-            //console.log(individualTime)
         }
     return arr
 }
