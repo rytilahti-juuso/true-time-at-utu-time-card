@@ -14,9 +14,28 @@ function countRealWorkingTime(wantedProcentageAsInt, fullWorkDayNumber){
     originalArray = preProcessOriginalArray(allValues, originalArray) 
     let combinedArray = createCombinedArray(originalArray)
     let minutesArray = transformArrayToMinutes(combinedArray, currentWorkDayLength, fullWorkDayNumber)
-    console.log(`"Total balance is: ${gainTotalBalance(minutesArray)} minutes`)
+
+    let total = gainTotalBalance(minutesArray)
+    return returnTotalHoursAndMinutesAsString(total)
 }
 
+// Takes the total balance as minutes and converts it to string of hours and min
+function returnTotalHoursAndMinutesAsString(total){
+    //if hours is not zero return hours amount, otherwise set it to zero
+    let hours = (total%60 === 0) ? 0 : Math.trunc(total/60)
+    let minutes = total % 60
+    // Control where the minus is put
+    if( minutes < 0 &&  hours != 0){
+        minutes = (-1)* minutes
+    }
+    let str = ""
+    if(hours != 0){
+        str = `Total balance is ${hours} h and ${minutes} min`
+    }else{
+        str = `Total balance is ${minutes} min`
+    }
+    return str
+}
 
 //Counts total balance, takes arg fully processed array which elements are all ints, return total balance as int
 function gainTotalBalance(arr){
