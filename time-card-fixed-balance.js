@@ -14,9 +14,21 @@ function countRealWorkingTime(wantedProcentageAsInt, fullWorkDayNumber){
     //let workingDaysCount = howManyDaysIsShowing-countShowingfreeDays()
     originalArray = preProcessOriginalArray(allValues, originalArray) 
     let combinedArray = createCombinedArray(originalArray)
+    console.log(originalArray)
+    console.log(combinedArray)
     let minutesArray = transformArrayToMinutes(combinedArray, currentWorkDayLength, fullWorkDayNumber)
     let total = gainTotalBalance(minutesArray)
     return returnTotalHoursAndMinutesAsString(total)
+}
+
+//returns array that has hours and mins converted to minutes. All array elements are now int
+function transformArrayToMinutes(combinedArray, currentWorkDayLength, fullWorkDayNumber){
+    let arr = []
+    for(let i = 0; i < combinedArray.length; i++){
+        let element = transformHoursAndMinutesIntoOneCombinedInt(combinedArray[i], currentWorkDayLength, fullWorkDayNumber, combinedArray.length, i)
+        arr.push(element)
+    }
+    return arr
 }
 
 // Takes the total balance as minutes and converts it to string of hours and min
@@ -47,26 +59,22 @@ function gainTotalBalance(arr){
     return total
 }
 
-//returns array that has hours and mins converted to minutes. All array elements are now int
-function transformArrayToMinutes(combinedArray, currentWorkDayLength, fullWorkDayNumber){
-    let arr = []
-    for(let i = 0; i < combinedArray.length; i++){
-        let element = combinedArray[i]
-        let actualElement = combinedArray[i]
-        element = element.replace("min", "")
-        element = processHourToMinutes(element)
-        //Process hours to minutes
-        element = convertHoursToMinutesAndAddMinutesAndHoursTogether(element)
-        element = convertRelationalMinutesToActualMinutes(element)
-        if(i >= (combinedArray.length-fullWorkDayNumber)){
-            element = countActionalRelationalMinutes(element, fullWorkDayMinutes, actualElement)
-        }else{
-            //process the shorten days to correct values
-            element = countActionalRelationalMinutes(element, currentWorkDayLength, actualElement)
-        }
-        arr.push(element)
+
+
+function transformHoursAndMinutesIntoOneCombinedInt (element, currentWorkDayLength, fullWorkDayNumber, daysNumberInTotal, i){
+    let actualElement = element
+    element = element.replace("min", "")
+    element = processHourToMinutes(element)
+    //Process hours to minutes
+    element = convertHoursToMinutesAndAddMinutesAndHoursTogether(element)
+    element = convertRelationalMinutesToActualMinutes(element)
+    if(i >= (daysNumberInTotal-fullWorkDayNumber)){
+        element = countActionalRelationalMinutes(element, fullWorkDayMinutes, actualElement)
+    }else{
+        //process the shorten days to correct values
+        element = countActionalRelationalMinutes(element, currentWorkDayLength, actualElement)
     }
-    return arr
+    return element
 }
 
 function countActionalRelationalMinutes(element, currentWorkDayLength, actualElement){
@@ -158,38 +166,59 @@ function convertHoursToMinutesAndAddMinutesAndHoursTogether(element){
 function createCombinedArray(originalArray){
     let hoursAndMinsCombined = []
     for(let i = 0; i < originalArray.length; i++){
-        if(i <= originalArray.length-2){
-            let num2 = i+1
-            if(originalArray[i].includes("h")){
-                let combined = originalArray[i] + originalArray[i+1]
-                hoursAndMinsCombined.push(combined)
-            }else{
-                if(i!= 0){
-                    if(!originalArray[i-1].includes("h")){
-                        hoursAndMinsCombined.push(originalArray[i])
-                    }
-                }
-                if(i === 0 && !originalArray[i].includes("h")){
-                    hoursAndMinsCombined.push(originalArray[i])
-                }
-            } 
+       let element = createCombinedHourAndMinuteString(i, originalArray)
+        if(element){
+            hoursAndMinsCombined.push(element)
         }
             
 }
+console.log("HOursAndMInsCombined length is: " + hoursAndMinsCombined.length)
 return hoursAndMinsCombined
+}
+
+//Note: returns undefined if the element of original array is already pushed to some "XhYmin"-string.
+function createCombinedHourAndMinuteString(i, originalArray) {
+    let element
+    if (i <= originalArray.length - 1) {
+        let num2 = i + 1
+        if (originalArray[i].includes("h")) {
+            let combined = originalArray[i] + originalArray[i + 1]
+            element = combined
+            //hoursAndMinsCombined.push(combined)
+        }
+        else {
+            if (i != 0) {
+                if (!originalArray[i - 1].includes("h")) {
+                    //hoursAndMinsCombined.push(originalArray[i])
+                    element = originalArray[i]
+                }
+            }
+            if (i === 0 && !originalArray[i].includes("h")) {
+                //hoursAndMinsCombined.push(originalArray[i])
+                element = originalArray[i]
+            }
+        }
+    }
+    return element
 }
 
 //Cleans Original array of extra spaces etc.
 function preProcessOriginalArray(allValues, arr){
     let previousHourWasMinus = false
-    for(let  val of allValues.values()){
-        let individualTime = val.innerHTML.toString()      
-        let patt = /\S/g;   
-        let result = individualTime.match(patt).join('')
-        arr.push(result = individualTime.match(patt).join(''))
+    for(let  element of allValues.values()){
+        element = removeSpacesAndPutMinutesAndHoursInToOneString(element)   
+        arr.push(element)
             //console.log(individualTime)
         }
     return arr
+}
+
+function removeSpacesAndPutMinutesAndHoursInToOneString(element){
+    let individualTime = element.innerHTML.toString()      
+        let patt = /\S/g;   
+        element = individualTime.match(patt).join('')
+        element = individualTime.match(patt).join('')
+    return element
 }
 
 //returns number of free days from work
