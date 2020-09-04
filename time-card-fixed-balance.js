@@ -167,11 +167,13 @@ function createCombinedArray(originalArray){
         createCombinedHourAndMinuteString(i, originalArray, hoursAndMinsCombined)
             
 }
+console.log("HOursAndMInsCombined length is: " + hoursAndMinsCombined.length)
 return hoursAndMinsCombined
 }
 
 function createCombinedHourAndMinuteString(i, originalArray, hoursAndMinsCombined) {
-    if (i <= originalArray.length - 2) {
+    console.log(originalArray)
+    if (i <= originalArray.length - 1) {
         let num2 = i + 1
         if (originalArray[i].includes("h")) {
             let combined = originalArray[i] + originalArray[i + 1]
