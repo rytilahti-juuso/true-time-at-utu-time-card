@@ -14,7 +14,6 @@ function countRealWorkingTime(wantedProcentageAsInt, fullWorkDayNumber){
     originalArray = preProcessOriginalArray(allValues, originalArray) 
     let combinedArray = createCombinedArray(originalArray)
     let minutesArray = transformArrayToMinutes(combinedArray, currentWorkDayLength, fullWorkDayNumber)
-
     let total = gainTotalBalance(minutesArray)
     return returnTotalHoursAndMinutesAsString(total)
 }
@@ -52,30 +51,57 @@ function transformArrayToMinutes(combinedArray, currentWorkDayLength, fullWorkDa
     let arr = []
     for(let i = 0; i < combinedArray.length; i++){
         let element = combinedArray[i]
+        let actualElement = combinedArray[i]
         element = element.replace("min", "")
         element = processHourToMinutes(element)
         //Process hours to minutes
         element = convertHoursToMinutesAndAddMinutesAndHoursTogether(element)
         element = convertRelationalMinutesToActualMinutes(element)
-        if(i >= combinedArray.length-fullWorkDayNumber){
-            //Do nothing, full workDays are handled in convertRelationalMinutesToActualMinutes()
+        if(i >= (combinedArray.length-fullWorkDayNumber)){
+            element = countActionalRelationalMinutes(element, fullWorkDayMinutes, actualElement)
         }else{
             //process the shorten days to correct values
-            element = countActionalRelationalMinutes(element, currentWorkDayLength)
+            element = countActionalRelationalMinutes(element, currentWorkDayLength, actualElement)
         }
         arr.push(element)
     }
     return arr
 }
 
-function countActionalRelationalMinutes(element, currentWorkDayLength){
-    element = element -currentWorkDayLength
+function countActionalRelationalMinutes(element, currentWorkDayLength, actualElement){
+    actualElement = actualElement
+    if(element >currentWorkDayLength ){
+        element = element -currentWorkDayLength
+    }else if(currentWorkDayLength === element || currentWorkDayLength === (element*(-1))){
+        // Do nothing
+    }else{
+        if(element < currentWorkDayLength  ){
+                element = currentWorkDayLength - element
+                element = element *(-1)    
+            
+        }
+    }
+    // If working day difference is 0 min this bugs (then it should return work day  full time instead of zero). Otherwise this code should work
+    if(actualElement=== "0min"){
+        element = 0
+    }
     return element
 }
 
 //returns actual working minutes, element is the relational minutes (+/- minus minutes as int relational to full working hours)
 function convertRelationalMinutesToActualMinutes(element) {
+    if(element > 0){
         element = fullWorkDayMinutes + element
+    }else{
+        if(element*(-1) === parseInt(fullWorkDayMinutes)){
+            //Do nothing
+        }else{
+            let percentage =1- (((-1)*element)/fullWorkDayMinutes)
+            element = fullWorkDayMinutes * percentage
+            element = Math.trunc(element)
+        }
+    }
+
     return element
 }
 
@@ -115,7 +141,7 @@ function convertHoursToMinutesAndAddMinutesAndHoursTogether(element){
     element = element.replace("-", "")
     if(element.includes("h")){
         hMin = parseInt(element.substring(0, element.indexOf("h")))
-        min = parseInt(element.indexOf("h")+1, element.length)
+        min = parseInt(element.substring(element.indexOf("h")+1, element.length))
         allMinutes = hMin +min
     }else{
         min= parseInt(element)
