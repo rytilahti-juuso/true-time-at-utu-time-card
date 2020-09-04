@@ -14,6 +14,8 @@ function countRealWorkingTime(wantedProcentageAsInt, fullWorkDayNumber){
     //let workingDaysCount = howManyDaysIsShowing-countShowingfreeDays()
     originalArray = preProcessOriginalArray(allValues, originalArray) 
     let combinedArray = createCombinedArray(originalArray)
+    console.log(originalArray)
+    console.log(combinedArray)
     let minutesArray = transformArrayToMinutes(combinedArray, currentWorkDayLength, fullWorkDayNumber)
     let total = gainTotalBalance(minutesArray)
     return returnTotalHoursAndMinutesAsString(total)
@@ -164,32 +166,39 @@ function convertHoursToMinutesAndAddMinutesAndHoursTogether(element){
 function createCombinedArray(originalArray){
     let hoursAndMinsCombined = []
     for(let i = 0; i < originalArray.length; i++){
-        createCombinedHourAndMinuteString(i, originalArray, hoursAndMinsCombined)
+       let element = createCombinedHourAndMinuteString(i, originalArray)
+        if(element){
+            hoursAndMinsCombined.push(element)
+        }
             
 }
 console.log("HOursAndMInsCombined length is: " + hoursAndMinsCombined.length)
 return hoursAndMinsCombined
 }
 
-function createCombinedHourAndMinuteString(i, originalArray, hoursAndMinsCombined) {
-    console.log(originalArray)
+function createCombinedHourAndMinuteString(i, originalArray) {
+    let element
     if (i <= originalArray.length - 1) {
         let num2 = i + 1
         if (originalArray[i].includes("h")) {
             let combined = originalArray[i] + originalArray[i + 1]
-            hoursAndMinsCombined.push(combined)
+            element = combined
+            //hoursAndMinsCombined.push(combined)
         }
         else {
             if (i != 0) {
                 if (!originalArray[i - 1].includes("h")) {
-                    hoursAndMinsCombined.push(originalArray[i])
+                    //hoursAndMinsCombined.push(originalArray[i])
+                    element = originalArray[i]
                 }
             }
             if (i === 0 && !originalArray[i].includes("h")) {
-                hoursAndMinsCombined.push(originalArray[i])
+                //hoursAndMinsCombined.push(originalArray[i])
+                element = originalArray[i]
             }
         }
     }
+    return element
 }
 
 //Cleans Original array of extra spaces etc.
