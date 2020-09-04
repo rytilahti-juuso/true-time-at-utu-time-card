@@ -176,6 +176,7 @@ console.log("HOursAndMInsCombined length is: " + hoursAndMinsCombined.length)
 return hoursAndMinsCombined
 }
 
+//Note: returns undefined if the element of original array is already pushed to some "XhYmin"-string.
 function createCombinedHourAndMinuteString(i, originalArray) {
     let element
     if (i <= originalArray.length - 1) {
